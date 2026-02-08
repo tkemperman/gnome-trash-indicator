@@ -200,8 +200,8 @@ const TrashMenu = GObject.registerClass(
       let trashPath = GLib.get_home_dir() + '/.local/share/Trash/';
       this.localTrashPath = ".local/share/Trash/";
 
-      this.trash_files_folder = Gio.file_new_for_uri('file:///' + trashPath + 'files/');
-      this.trash_info_files_folder = Gio.file_new_for_uri('file:///' + trashPath + 'info/');
+      this.trash_files_folder = Gio.File.new_for_path(trashPath + 'files');
+      this.trash_info_files_folder = Gio.File.new_for_path(trashPath + 'info');
 
       this._addConstMenuItems();
       this._onTrashChange();
@@ -331,7 +331,7 @@ const TrashMenu = GObject.registerClass(
           null,
           file_info.get_symbolic_icon(),
           () => {
-            this._onRestoreTrashFile(restore_path, delete_date);
+            this._onRestoreTrashFile(file_name, restore_path, delete_date);
           },
           () => {
             this._onDeleteSingleTrashFile(file_name);
@@ -348,9 +348,10 @@ const TrashMenu = GObject.registerClass(
       this.filesList.removeAll();
     }
 
-    _onRestoreTrashFile(restore_path, delete_date) {
-      this.file_name = restore_path.split('/').pop();
-      this.restore_path = restore_path.slice(0, restore_path.lastIndexOf("/") + 1);
+    _onRestoreTrashFile(file_name, restore_path, delete_date) {
+      this.file_name = file_name;
+      let decoded_path = decodeURIComponent(restore_path);
+      this.restore_path = decoded_path.slice(0, decoded_path.lastIndexOf("/") + 1);
       let formatted_date = delete_date.split('T');
 
       new InteractiveDialog(

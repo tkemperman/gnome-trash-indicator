@@ -6,6 +6,10 @@
 - Support for GNOME Shell 45, 46, 47, 48, and 49
 - New `_notify()` helper using `MessageTray.Source` and `MessageTray.Notification` (replaces deprecated `Main.notify`)
 
+### Fixed
+- Fixed restore function using double slashes in file paths (`file:///` + absolute path)
+- Fixed restore function using URL-encoded filenames instead of actual filenames
+
 ### Changed
 - Migrated from legacy `imports.*` system to ESM (`import` / `export default`)
 - Replaced `imports.gi.*` with `gi://` module imports
